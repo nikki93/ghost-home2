@@ -19,7 +19,7 @@ end
 
 function app.reload()
     if app.lastUrl then
-        network.flush(function() return true end) -- Flush entire `network.fetch` cache
+        network.flush()
         app.load(app.lastUrl)
     end
 end
@@ -56,7 +56,7 @@ function portal.onError(err, descendant)
     app.close()
     errors.lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
     print('error: ' .. errors.lastError)
-    network.flush(function() return true end) -- Flush entire `network.fetch` cache
+    network.flush()
 end
 
 function errors.clear()
