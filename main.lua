@@ -53,8 +53,6 @@ function main.keypressed(key, ...)
         return
     end
 
-    tui.love.keypressed(key, ...)
-
     app.forwardEvent('keypressed', key, ...)
 end
 
@@ -89,10 +87,6 @@ for k in pairs({
         if main[k] then
             main[k](...)
         else -- Default behavior if we didn't define it in `main`
-            if tui.love[k] then
-                tui.love[k](...)
-            end
-
             app.forwardEvent(k, ...)
         end
     end

@@ -2,19 +2,21 @@
 
 local errors = {}
 
+local lastError
+
 function portal.onError(err, descendant)
     app.close()
-    errors.lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
-    print('error: ' .. errors.lastError)
+    lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
+    print('error: ' .. lastError)
     network.flush()
 end
 
 function errors.clear()
-    errors.lastError = nil
+    lastError = nil
 end
 
 function errors.update()
-    if errors.lastError ~= nil then
+    if lastError ~= nil then
         tui.setNextWindowPos(
             0.5 * love.graphics.getWidth(), 0.5 * love.graphics.getHeight(),
             'FirstUseEver',
@@ -30,9 +32,9 @@ function errors.update()
                 app.reload()
             end
             tui.sameLine()
-            if love.system.getClipboardText() ~= errors.lastError then
+            if love.system.getClipboardText() ~= lastError then
                 if tui.button('copy message') then
-                    love.system.setClipboardText(errors.lastError)
+                    love.system.setClipboardText(lastError)
                 end
             else
                 tui.alignTextToFramePadding()
@@ -40,7 +42,7 @@ function errors.update()
             end
 
             tui.inChild('error message', function()
-                tui.textWrapped(errors.lastError)
+                tui.textWrapped(lastError)
             end)
         end)
     end

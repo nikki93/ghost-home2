@@ -2,20 +2,21 @@
 
 local dev = {}
 
-dev.visible = false
-dev.consoleMessages = {}
-dev.scrollToBottom = true
+local visible = false
+
+local consoleMessages = {}
+local consoleScrollToBottom = true
 
 function dev.setVisible(newVisible)
-    dev.visible = newVisible
+    visible = newVisible
 end
 
 function dev.isVisible()
-    return dev.visible
+    return visible
 end
 
 function dev.update()
-    if not dev.visible then
+    if not visible then
         return
     end
 
@@ -38,16 +39,16 @@ function dev.update()
         end
         tui.sameLine()
         if tui.button('clear console') then
-            dev.consoleMessages = {}
+            consoleMessages = {}
         end
 
         tui.inChild('console', function()
-            for _, message in ipairs(dev.consoleMessages) do
+            for _, message in ipairs(consoleMessages) do
                 tui.textWrapped(message)
             end
-            if dev.scrollToBottom then
+            if consoleScrollToBottom then
                 tui.setScrollHere()
-                dev.scrollToBottom = false
+                consoleScrollToBottom = false
             end
         end)
     end)
@@ -58,8 +59,8 @@ function dev.print(...)
     for i = 2, select('#', ...) do
         message = message .. '    ' .. select(i, ...)
     end
-    table.insert(dev.consoleMessages, message)
-    dev.scrollToBottom = true
+    table.insert(consoleMessages, message)
+    consoleScrollToBottom = true
 end
 
 local oldPrint = print
