@@ -13,6 +13,8 @@ local main = {}
 function main.update(dt)
     app.forwardEvent('update', dt)
 
+    launch.setVisible(not app.isOpen())
+
     launch.update()
     errors.update()
     dev.update()
@@ -40,6 +42,12 @@ function main.keypressed(key, ...)
     -- F4 or cmd + d: toggle development window
     if key == 'f4' or (love.keyboard.isDown('lgui') and key == 'd') then
         dev.toggle()
+        return
+    end
+
+    -- F10 or cmd + w: close app
+    if key == 'f10' or (love.keyboard.isDown('lgui') and key == 'w') then
+        app.close()
         return
     end
 

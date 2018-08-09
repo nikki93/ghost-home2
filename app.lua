@@ -42,4 +42,8 @@ function app.drawLoadedIndicator()
     end
 end
 
+function app.isOpen()
+    return app.portal ~= nil
+end
+
 return app
