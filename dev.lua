@@ -6,8 +6,12 @@ dev.visible = false
 dev.consoleMessages = {}
 dev.scrollToBottom = true
 
-function dev.toggle()
-    dev.visible = not dev.visible
+function dev.setVisible(newVisible)
+    dev.visible = newVisible
+end
+
+function dev.isVisible()
+    return dev.visible
 end
 
 function dev.update()
@@ -17,7 +21,18 @@ function dev.update()
 
     tui.setNextWindowPos(40, love.graphics.getHeight() - 240 - 40, 'FirstUseEver')
     tui.setNextWindowSize(480, 240, 'FirstUseEver')
-    tui.inWindow('development', function()
+    tui.inWindow('development', true, function(open)
+        if not open then
+            dev.setVisible(false)
+            return
+        end
+
+        if app.isOpen() then
+            if tui.button('close portal') then
+                app.close()
+            end
+            tui.sameLine()
+        end
         if tui.button('reload portal') then
             app.reload()
         end

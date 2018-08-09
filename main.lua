@@ -27,8 +27,16 @@ function main.draw()
 end
 
 function main.keypressed(key, ...)
+    local cmdDown = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
+
+    -- F10 or cmd + w: close app
+    if key == 'f10' or (cmdDown and key == 'w') then
+        app.close()
+        return
+    end
+
     -- F5 or cmd + r: reload
-    if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
+    if key == 'f5' or (cmdDown and key == 'r') then
         network.async(function()
             app.reload()
 
@@ -40,14 +48,8 @@ function main.keypressed(key, ...)
     end
 
     -- F4 or cmd + d: toggle development window
-    if key == 'f4' or (love.keyboard.isDown('lgui') and key == 'd') then
-        dev.toggle()
-        return
-    end
-
-    -- F10 or cmd + w: close app
-    if key == 'f10' or (love.keyboard.isDown('lgui') and key == 'w') then
-        app.close()
+    if key == 'f4' or (cmdDown and key == 'd') then
+        dev.setVisible(not dev.isVisible())
         return
     end
 
