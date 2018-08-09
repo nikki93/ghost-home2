@@ -13,28 +13,48 @@ local main = {}
 function main.update(dt)
     app.forwardEvent('update', dt)
 
-    launch.setVisible(not app.isOpen())
+    launch:setVisible(not app.isOpen())
 
-    launch.update()
+    launch:update()
     errors.update()
     dev.update()
 end
 
 function main.draw()
-    app.forwardEvent('draw')
+   if launch.visible then
+      launch:draw()
+   else
+      app.forwardEvent('draw')
+   end
 
     app.drawLoadedIndicator()
+end
+
+function main.mousepressed(x, y, button, ...)
+   if launch.visible then
+      launch:mousepressed(x, y, button)
+   else
+      app.forwardEvent('mousepressed', x, y, button, ...)
+   end
+end
+
+function main.mousemoved(x, y, button, ...)
+   if launch.visible then
+      launch:mousemoved(x, y, button)
+   else
+      app.forwardEvent('mousemoved', x, y, button, ...)
+   end
 end
 
 function main.keypressed(key, ...)
     local cmdDown = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
 
     -- F10 or cmd + w: close app
-    if key == 'f10' or (cmdDown and key == 'w') then
-        app.close()
+    if key == 'escape' then
+        app.togglePaused()
         return
     end
-
+    
     -- F5 or cmd + r: reload
     if key == 'f5' or (cmdDown and key == 'r') then
         network.async(function()
