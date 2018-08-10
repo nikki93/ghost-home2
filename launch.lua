@@ -38,7 +38,7 @@ function launch:update()
          clipboard = clipboard:gsub('\n', ' ')
          clipboard = clipboard:gsub("%s+", "")
          if clipboard:len() > 0 then
-            self._history[0] = { value = clipboard, title = 'Clipboard: ' .. clipboard }
+            self._history[0] = { value = clipboard, title = clipboard, subtitle = 'Clipboard' }
          end
       end
    end
@@ -73,7 +73,7 @@ function launch:draw()
       font:setFontSafe(font:smallFont())
       love.graphics.setColor(1, 1, 1, 1)
       local version = 'v0.0.1'
-      local strWidth = 48 -- todo: nikki: enable font:smallFont():getWidth(version)
+      local strWidth = font:smallFont():getWidth(version)
       love.graphics.print(version, self._viewport.width - strWidth - 24, self._viewport.height - 40)
    end
 end
