@@ -3,6 +3,16 @@ font = {
    _isLoading = false,
 }
 
+local emptyFont = {}
+
+function emptyFont:getWidth(str)
+   return 1
+end
+
+function emptyFont:getHeight()
+   return 1
+end
+
 function font:bigFont()
    return self:_getFont('big')
 end
@@ -19,11 +29,16 @@ function font:_getFont(key)
    if self._fonts == nil then
       self:load()
    end
-   return self._fonts[key]
+   local result = self._fonts[key]
+   if result == nil then
+      return emptyFont
+   else
+      return result
+   end
 end
 
 function font:setFontSafe(someFont)
-   if someFont then
+   if someFont and someFont ~= emptyFont then
       love.graphics.setFont(someFont)
    end
 end
