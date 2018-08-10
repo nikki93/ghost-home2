@@ -10,7 +10,7 @@ function emptyFont:getWidth(str)
 end
 
 function emptyFont:getHeight()
-   return 1
+   return 12
 end
 
 function font:bigFont()
@@ -38,18 +38,24 @@ function font:_getFont(key)
 end
 
 function font:setFontSafe(someFont)
+   --[[
+   -- todo: nikki: enable
    if someFont and someFont.killme == nil then
       love.graphics.setFont(someFont)
    end
+   --]]
 end
 
 function font:load()
    if not self._isLoading then
       self._isLoading = true
       self._fonts = {}
+      --[[
+      -- todo: nikki: enable
       self._fonts['big'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 36)
       self._fonts['small'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 14)
       self._fonts['tiny'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 8)
+      --]]
    end
 end
 
