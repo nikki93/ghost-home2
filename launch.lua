@@ -2,6 +2,7 @@
 
 box = require 'box'
 history = require 'history'
+font = require 'font'
 
 local launch = {
    visible = false,
@@ -70,9 +71,16 @@ end
 function launch:draw()
    if self.visible then
       local clipboard = love.system.getClipboardText()
+      clipboard = string.gsub(clipboard, '\n', ' ')
 
       self._history[0] = 'Clipboard: ' .. clipboard
       box.draw(self._viewport, self._boxSize, 'ghost-player', self._history, self._rowHovered, self._lineHeight)
+      
+      love.graphics.setFont(font:smallFont())
+      love.graphics.setColor(1, 1, 1, 1)
+      local version = 'v0.0.1'
+      local strWidth = font:smallFont():getWidth(version)
+      love.graphics.print(version, self._viewport.width - strWidth - 24, self._viewport.height - 40)
    end
 end
 

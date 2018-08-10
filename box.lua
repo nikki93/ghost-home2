@@ -1,5 +1,7 @@
 box = {}
 
+font = require 'font'
+
 function box.getItemIndex(mousePosition, viewport, proportionsInViewport, numItems, lineHeight)
    local centerX, centerY = viewport.width * 0.5, viewport.height * 0.5
    local boxWidth, boxHeight = viewport.width * proportionsInViewport.x, viewport.height * proportionsInViewport.y
@@ -27,18 +29,21 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
 
       love.graphics.setColor(0, 0, 0, 1)
       if title then
-         love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 24)
+         love.graphics.setFont(font:bigFont())
+         love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 32 - (font:bigFont():getHeight() * 0.5))
       end
 
+      love.graphics.setFont(font:smallFont())
+      local fontHalfHeight = font:smallFont():getHeight() * 0.5
       local textX, textY = (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 72
       for k, v in pairs(items) do
          if k == itemIndexToHighlight then
             love.graphics.push('all')
             love.graphics.setColor(0.9, 0.9, 0.9, 1)
-            love.graphics.rectangle('fill', -boxWidth * 0.5, textY - 8, boxWidth, lineHeight)
+            love.graphics.rectangle('fill', -boxWidth * 0.5, textY, boxWidth, lineHeight)
             love.graphics.pop()
          end
-         love.graphics.print(v, textX, textY)
+         love.graphics.print(v, textX, textY + (lineHeight * 0.5) - fontHalfHeight)
          textY = textY + lineHeight
       end
       
