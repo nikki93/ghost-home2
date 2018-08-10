@@ -29,14 +29,14 @@ function box.drawItem(item, bounds, isHighlighted)
    end
    local valueY = bounds.y + (bounds.height * 0.5) - fontHalfHeight
    if item.subtitle then
-      love.graphics.setFont(font:tinyFont())
+      font:setFontSafe(font:tinyFont())
       love.graphics.print(item.subtitle, bounds.x + 24, bounds.y + bounds.height - 14)
       valueY = valueY - 6
    end
    if item.value or item.title then
       local label
       if item.title then label = item.title else label = item.value end
-      love.graphics.setFont(font:smallFont())
+      font:setFontSafe(font:smallFont())
       love.graphics.print(label, bounds.x + 24, valueY)
    end
 end
@@ -51,7 +51,7 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
 
       love.graphics.setColor(0, 0, 0, 1)
       if title then
-         love.graphics.setFont(font:bigFont())
+         font:setFontSafe(font:bigFont())
          love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 40 - (font:bigFont():getHeight() * 0.5))
       end
 

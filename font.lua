@@ -1,5 +1,6 @@
 font = {
-   _fonts = nil
+   _fonts = nil,
+   _isLoading = false,
 }
 
 function font:bigFont()
@@ -21,11 +22,20 @@ function font:_getFont(key)
    return self._fonts[key]
 end
 
+function font:setFontSafe(font)
+   if font then
+      love.graphics.setFont(font)
+   end
+end
+
 function font:load()
-   self._fonts = {}
-   self._fonts['big'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 36)
-   self._fonts['small'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 14)
-   self._fonts['tiny'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 8)
+   if not self._isLoading then
+      self._isLoading = true
+      self._fonts = {}
+      self._fonts['big'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 36)
+      self._fonts['small'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 14)
+      self._fonts['tiny'] = love.graphics.newFont('x14y24pxHeadUpDaisy.ttf', 8)
+   end
 end
 
 return font
