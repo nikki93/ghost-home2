@@ -45,8 +45,8 @@ function app.togglePaused()
       app._viewport.width = width
       app._viewport.height = height
       app._rowHovered = -1
-      app._options[0] = 'Resume'
-      app._options[1] = 'Back to ghost-player index'
+      app._options[0] = { value = 'Resume' }
+      app._options[1] = { value = 'Back to ghost-player index' }
    end
 end
 

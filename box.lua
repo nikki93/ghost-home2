@@ -19,6 +19,28 @@ function box.getItemIndex(mousePosition, viewport, proportionsInViewport, numIte
    return -1
 end
 
+function box.drawItem(item, bounds, isHighlighted)
+   local fontHalfHeight = font:smallFont():getHeight() * 0.5
+   if isHighlighted then
+      love.graphics.push('all')
+      love.graphics.setColor(0.9, 0.9, 0.9, 1)
+      love.graphics.rectangle('fill', bounds.x, bounds.y, bounds.width, bounds.height)
+      love.graphics.pop()
+   end
+   local valueY = bounds.y + (bounds.height * 0.5) - fontHalfHeight
+   if item.subtitle then
+      love.graphics.setFont(font:tinyFont())
+      love.graphics.print(item.subtitle, bounds.x + 24, bounds.y + bounds.height - 14)
+      valueY = valueY - 6
+   end
+   if item.value or item.title then
+      local label
+      if item.title then label = item.title else label = item.value end
+      love.graphics.setFont(font:smallFont())
+      love.graphics.print(label, bounds.x + 24, valueY)
+   end
+end
+
 function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHighlight, lineHeight)
       local centerX, centerY = viewport.width * 0.5, viewport.height * 0.5
       local boxWidth, boxHeight = viewport.width * proportionsInViewport.x, viewport.height * proportionsInViewport.y
@@ -33,18 +55,14 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
          love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 32 - (font:bigFont():getHeight() * 0.5))
       end
 
-      love.graphics.setFont(font:smallFont())
-      local fontHalfHeight = font:smallFont():getHeight() * 0.5
-      local textX, textY = (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 72
-      for k, v in pairs(items) do
-         if k == itemIndexToHighlight then
-            love.graphics.push('all')
-            love.graphics.setColor(0.9, 0.9, 0.9, 1)
-            love.graphics.rectangle('fill', -boxWidth * 0.5, textY, boxWidth, lineHeight)
-            love.graphics.pop()
-         end
-         love.graphics.print(v, textX, textY + (lineHeight * 0.5) - fontHalfHeight)
-         textY = textY + lineHeight
+      local x, y = (-boxWidth * 0.5), (-boxHeight * 0.5) + 72
+      for k, item in pairs(items) do
+         box.drawItem(
+            item,
+            { x = x, y = y, width = boxWidth, height = lineHeight },
+            k == itemIndexToHighlight
+         )
+         y = y + lineHeight
       end
       
       love.graphics.pop()

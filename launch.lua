@@ -8,7 +8,7 @@ local launch = {
    visible = false,
    _viewport = { width = 0, height = 0 },
    _rowHovered = -1,
-   _lineHeight = 28,
+   _lineHeight = 42,
    _boxSize = { x = 0.6, y = 0.5 },
    _history = {},
    _historyLength = 0,
@@ -19,7 +19,12 @@ function launch:setVisible(newVisible)
       self.visible = newVisible
       if self.visible then
          history:load()
-         self._history, self._historyLength = history:get()
+         local historyItems, historyLength = history:get()
+         self._history = {}
+         for k, item in pairs(historyItems) do
+            self._history[k] = { value = item }
+         end
+         self._historyLength = historyLength
          self._history[0] = '' -- sentinel for clipboard
          local width, height = love.window.getMode()
          self._viewport.width = width
@@ -30,20 +35,17 @@ function launch:setVisible(newVisible)
 end
 
 function launch:update()
-    if self.visible then
-        --[[
-        tui.setNextWindowPos(40, 40, 'FirstUseEver')
-        tui.setNextWindowSize(480, 320, 'FirstUseEver')
-        tui.inWindow('welcome to ghost!', function()
-            for name, url in pairs(urls) do
-                if tui.button(name) then
-                    app.load(url)
-                end
-            end
-            tui.text('fps: ' .. tostring(love.timer.getFPS()))
-        end)
-        --]]
-    end
+   if self.visible then
+      self._history[0] = { title = 'Clipboard is empty' }
+      local clipboard = love.system.getClipboardText()
+      if clipboard and clipboard:len() > 0 then
+         clipboard = clipboard:gsub('\n', ' ')
+         clipboard = clipboard:gsub("%s+", "")
+         if clipboard:len() > 0 then
+            self._history[0] = { value = clipboard, title = clipboard, subtitle = 'Clipboard' }
+         end
+      end
+   end
 end
 
 function launch:mousepressed(x, y, button)
@@ -51,14 +53,9 @@ function launch:mousepressed(x, y, button)
       local rowIndexClicked = box.getItemIndex({ x = x, y = y }, self._viewport, self._boxSize, self._historyLength, self._lineHeight)
       local urlClicked
       if rowIndexClicked >= 0 then
-         if rowIndexClicked == 0 then
-            local clipboard = love.system.getClipboardText()
-            urlClicked = clipboard
-         else
-            urlClicked = self._history[rowIndexClicked]
-         end
+         urlClicked = self._history[rowIndexClicked].value
       end
-      if urlClicked then
+      if urlClicked and urlClicked:len() then
          history:push(urlClicked)
          app.load(urlClicked)
       end
@@ -67,15 +64,15 @@ end
 
 function launch:mousemoved(x, y, button)
    local rowIndexHovered = box.getItemIndex({ x = x, y = y }, self._viewport, self._boxSize, self._historyLength, self._lineHeight)
-   self._rowHovered = rowIndexHovered
+   if rowIndexHovered == 0 and self._history[0].value == nil then
+      self._rowHovered = -1 -- empty clipboard
+   else
+      self._rowHovered = rowIndexHovered
+   end
 end
 
 function launch:draw()
    if self.visible then
-      local clipboard = love.system.getClipboardText()
-      clipboard = string.gsub(clipboard, '\n', ' ')
-
-      self._history[0] = 'Clipboard: ' .. clipboard
       box.draw(self._viewport, self._boxSize, 'ghost-player', self._history, self._rowHovered, self._lineHeight)
       
       love.graphics.setFont(font:smallFont())
