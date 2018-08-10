@@ -1,5 +1,9 @@
 -- Launch window
 
+box = require 'box'
+history = require 'history'
+font = require 'font'
+
 local launch = {
    visible = false,
    _viewport = { width = 0, height = 0 },
