@@ -1,7 +1,5 @@
 -- App management
 
-box = require 'box'
-
 local app = {
    _isPaused = false,
    _viewport = { width = 0, height = 0 },

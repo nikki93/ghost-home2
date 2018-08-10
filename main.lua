@@ -1,6 +1,9 @@
 -- Modules
 
 errors = require 'errors'
+box = require 'box'
+font = require 'font'
+history = require 'history'
 app = require 'app'
 launch = require 'launch'
 dev = require 'dev'
