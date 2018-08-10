@@ -3,7 +3,7 @@ font = {
    _isLoading = false,
 }
 
-local emptyFont = {}
+local emptyFont = { killme = true }
 
 function emptyFont:getWidth(str)
    return 1
@@ -38,7 +38,7 @@ function font:_getFont(key)
 end
 
 function font:setFontSafe(someFont)
-   if someFont and someFont ~= emptyFont then
+   if someFont and someFont.killme == nil then
       love.graphics.setFont(someFont)
    end
 end
