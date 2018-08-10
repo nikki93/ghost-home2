@@ -21,6 +21,7 @@ function app.load(url)
         childPortal = portal:newChild(url)
         lastLoadTime = love.timer.getTime()
         print("loaded '" .. url .. "'")
+        history:push(url)
         errors.clear()
     end)
 end

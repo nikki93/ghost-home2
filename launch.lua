@@ -52,7 +52,6 @@ function launch:mousepressed(x, y, button)
          urlClicked = self._history[rowIndexClicked].value
       end
       if urlClicked and urlClicked:len() then
-         history:push(urlClicked)
          app.load(urlClicked)
       end
    end
