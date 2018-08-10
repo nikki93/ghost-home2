@@ -5,7 +5,7 @@ local errors = {}
 local lastError
 
 function portal.onError(err, descendant)
-    app.close()
+    if app then app.close() end -- Guard this in case `app` wasn't even loaded yet
     lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
     print('error: ' .. lastError)
     network.flush()
