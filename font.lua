@@ -53,4 +53,6 @@ function font:load()
    end
 end
 
+font:load()
+
 return font
