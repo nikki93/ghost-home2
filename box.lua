@@ -35,7 +35,7 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
          if k == itemIndexToHighlight then
             love.graphics.push('all')
             love.graphics.setColor(0.9, 0.9, 0.9, 1)
-            love.graphics.rectangle('fill', -boxWidth * 0.5, textY - 6, boxWidth, lineHeight)
+            love.graphics.rectangle('fill', -boxWidth * 0.5, textY - 8, boxWidth, lineHeight)
             love.graphics.pop()
          end
          love.graphics.print(v, textX, textY)

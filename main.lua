@@ -5,7 +5,6 @@ app = require 'app'
 launch = require 'launch'
 dev = require 'dev'
 
-
 -- Top-level Love callbacks
 
 local main = {}

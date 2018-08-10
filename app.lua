@@ -6,7 +6,7 @@ local app = {
    _isPaused = false,
    _viewport = { width = 0, height = 0 },
    _boxSize = { x = 0.6, y = 0.3 },
-   _lineHeight = 24,
+   _lineHeight = 28,
    _numOptions = 1,
    _rowHovered = -1,
    _options = {},
