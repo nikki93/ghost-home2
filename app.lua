@@ -18,6 +18,7 @@ local childPortal -- The portal to the app
 
 function app.load(url)
     lastUrl = url
+    app._isPaused = false
     network.async(function()
         childPortal = portal:newChild(url)
         lastLoadTime = love.timer.getTime()
@@ -50,11 +51,15 @@ function app.togglePaused()
 end
 
 function app.forwardEvent(eventName, ...)
-   if app._isPaused and
-      (eventName == 'update' or eventName == 'draw' or eventName == 'mousemoved' or eventName == 'mousepressed')
-   then
-      app[eventName](...)
+   if app._isPaused then
+      -- paused: capture needed events for pause menu
+      -- and don't forward anything to childPortal
+      if (eventName == 'update' or eventName == 'draw' or eventName == 'mousemoved' or eventName == 'mousepressed')
+      then
+         app[eventName](...)
+      end
    else
+      -- not paused, forward everything to childPortal
       if childPortal and childPortal[eventName] then
          childPortal[eventName](childPortal, ...)
       end
@@ -63,7 +68,7 @@ end
 
 function app.draw()
    if app._isPaused then
-      -- forward to underlying portal
+      -- draw underlying portal
       if childPortal and childPortal.draw then
          childPortal:draw()
       end
