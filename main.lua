@@ -80,8 +80,8 @@ end
 
 function main.filedropped(file)
     local url = file:getFilename()
-    if url:match('^ghost://') then
-        app.load(url:gsub('^ghost://', 'https://'))
+    if network.isAbsolute(file) then
+        app.load(url)
     end
 end
 
