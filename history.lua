@@ -1,7 +1,7 @@
 history = {
    _list = {},
    _numItems = 0,
-   MAX_HISTORY_LENGTH = 8,
+   MAX_HISTORY_LENGTH = 6,
 }
 
 function history:load()

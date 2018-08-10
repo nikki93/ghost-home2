@@ -52,10 +52,10 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
       love.graphics.setColor(0, 0, 0, 1)
       if title then
          love.graphics.setFont(font:bigFont())
-         love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 32 - (font:bigFont():getHeight() * 0.5))
+         love.graphics.print(title, (-boxWidth * 0.5) + 24, (-boxHeight * 0.5) + 40 - (font:bigFont():getHeight() * 0.5))
       end
 
-      local x, y = (-boxWidth * 0.5), (-boxHeight * 0.5) + 72
+      local x, y = (-boxWidth * 0.5), (-boxHeight * 0.5) + 80
       for k, item in pairs(items) do
          box.drawItem(
             item,
