@@ -80,7 +80,7 @@ end
 
 function main.filedropped(file)
     local url = file:getFilename()
-    if network.isAbsolute(file) then
+    if network.isAbsolute(url) then
         app.load(url)
     end
 end
