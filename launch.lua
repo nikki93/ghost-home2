@@ -69,7 +69,7 @@ end
 function launch:draw()
    if self.visible then
       box.draw(self._viewport, self._boxSize, 'ghost-player', self._history, self._rowHovered, self._lineHeight)
-      
+
       font:setFontSafe(font:smallFont())
       love.graphics.setColor(1, 1, 1, 1)
       local version = 'v0.0.1'

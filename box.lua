@@ -64,7 +64,7 @@ function box.draw(viewport, proportionsInViewport, title, items, itemIndexToHigh
          )
          y = y + lineHeight
       end
-      
+
       love.graphics.pop()
 end
 

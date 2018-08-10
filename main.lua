@@ -56,7 +56,7 @@ function main.keypressed(key, ...)
         app.togglePaused()
         return
     end
-    
+
     -- F5 or cmd + r: reload
     if key == 'f5' or (cmdDown and key == 'r') then
         network.async(function()
