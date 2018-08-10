@@ -47,19 +47,21 @@ function launch:update()
 end
 
 function launch:mousepressed(x, y, button)
-   local rowIndexClicked = box.getItemIndex({ x = x, y = y }, self._viewport, self._boxSize, self._historyLength, self._lineHeight)
-   local urlClicked
-   if rowIndexClicked >= 0 then
-      if rowIndexClicked == 0 then
-         local clipboard = love.system.getClipboardText()
-         urlClicked = clipboard
-      else
-         urlClicked = self._history[rowIndexClicked]
+   if self.visible then
+      local rowIndexClicked = box.getItemIndex({ x = x, y = y }, self._viewport, self._boxSize, self._historyLength, self._lineHeight)
+      local urlClicked
+      if rowIndexClicked >= 0 then
+         if rowIndexClicked == 0 then
+            local clipboard = love.system.getClipboardText()
+            urlClicked = clipboard
+         else
+            urlClicked = self._history[rowIndexClicked]
+         end
       end
-   end
-   if urlClicked then
-      history:push(urlClicked)
-      app.load(urlClicked)
+      if urlClicked then
+         history:push(urlClicked)
+         app.load(urlClicked)
+      end
    end
 end
 
