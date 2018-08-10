@@ -75,6 +75,13 @@ function main.keypressed(key, ...)
     app.forwardEvent('keypressed', key, ...)
 end
 
+function main.filedropped(file)
+    local url = file:getFilename()
+    if url:match('^ghost://') then
+        app.load(url:gsub('^ghost://', 'https://'))
+    end
+end
+
 for k in pairs({
     load = true,
     update = true,
@@ -101,6 +108,9 @@ for k in pairs({
     joystickpressed = true,
     joystickreleased = true,
     joystickremoved = true,
+    focus = true,
+    filedropped = true,
+    visible = true,
 }) do
     love[k] = function(...)
         if main[k] then
@@ -110,3 +120,4 @@ for k in pairs({
         end
     end
 end
+
