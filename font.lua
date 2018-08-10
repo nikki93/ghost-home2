@@ -22,9 +22,9 @@ function font:_getFont(key)
    return self._fonts[key]
 end
 
-function font:setFontSafe(font)
-   if font then
-      love.graphics.setFont(font)
+function font:setFontSafe(someFont)
+   if someFont then
+      love.graphics.setFont(someFont)
    end
 end
 
