@@ -18,7 +18,11 @@ function app.load(url)
     lastUrl = url
     app._isPaused = false
     network.async(function()
-        childPortal = portal:newChild(url)
+        childPortal = portal:newChild(url, {
+            extraGlobals = {
+                print = print,
+            },
+        })
         lastLoadTime = love.timer.getTime()
         print("loaded '" .. url .. "'")
         history:push(url)
