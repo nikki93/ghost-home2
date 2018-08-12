@@ -1,5 +1,5 @@
 history = {
-   _list = {},
+   _list = nil,
    _numItems = 0,
    MAX_HISTORY_LENGTH = 6,
 }
