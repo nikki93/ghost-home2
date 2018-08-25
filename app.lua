@@ -42,7 +42,7 @@ function app.reload()
 end
 
 function app.softReload()
-    if lastUrl then
+    if lastUrl and childPortal then
         -- Iterate over modules loaded in `childPortal` asynchronously
         local urls = {} -- Map of `url` to `'waiting'`, `'reload'` or `'done'`
         local mainCoroutine = coroutine.running()
