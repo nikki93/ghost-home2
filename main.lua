@@ -74,10 +74,6 @@ function main.keypressed(key, ...)
     if key == 'f6' or (cmdDown and key == 'e') then
         network.async(function()
             app.softReload()
-
-            -- GC and print memory usage
-            collectgarbage()
-            print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
         end)
         return
     end
