@@ -57,7 +57,7 @@ end
 function dev.print(...)
     local message = select(1, ...)
     for i = 2, select('#', ...) do
-        message = message .. '    ' .. select(i, ...)
+        message = message .. '    ' .. tostring(select(i, ...))
     end
     table.insert(consoleMessages, message)
     consoleScrollToBottom = true
