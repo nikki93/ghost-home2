@@ -50,6 +50,7 @@ end
 
 function main.keypressed(key, ...)
     local cmdDown = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
+    local shiftDown = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
 
     -- F10 or cmd + w: close app
     if key == 'escape' then
@@ -61,6 +62,18 @@ function main.keypressed(key, ...)
     if key == 'f5' or (cmdDown and key == 'r') then
         network.async(function()
             app.reload()
+
+            -- GC and print memory usage
+            collectgarbage()
+            print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
+        end)
+        return
+    end
+
+    -- F6 or shift + cmd + e: soft reload (keep app running, reload only changed modules)
+    if key == 'f6' or (cmdDown and key == 'e') then
+        network.async(function()
+            app.softReload()
 
             -- GC and print memory usage
             collectgarbage()

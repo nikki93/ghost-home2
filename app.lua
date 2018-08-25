@@ -14,6 +14,8 @@ local lastUrl -- Last URL that was requested to be loaded
 local lastLoadTime -- `love.timer.getTime()` when last load occured
 local childPortal -- The portal to the app
 
+local copas = require 'copas'
+
 function app.load(url)
     lastUrl = url
     app._isPaused = false
@@ -36,6 +38,66 @@ function app.reload()
     if lastUrl then
         network.flush()
         app.load(lastUrl)
+    end
+end
+
+function app.softReload()
+    if lastUrl then
+        -- Iterate over modules loaded in `childPortal` asynchronously
+        local urls = {} -- Map of `url` to `'waiting'`, `'reload'` or `'done'`
+        local mainCoroutine = coroutine.running()
+        for url in pairs(childPortal.globals.package.loaded) do
+            -- Make sure it's located under the portal's base URL
+            if url:sub(1, #childPortal.basePath) == childPortal.basePath then
+                urls[url] = 'waiting'
+                network.async(function()
+                    -- Find the previously cached and newly requested 'Last-Modified' HTTP HEAD values
+                    local before, after
+                    do
+                        local _, _, headers = network.fetch(url, 'HEAD')
+                        before = headers['last-modified']
+                    end
+                    network.fetchEntries.HEAD[url] = nil -- Flush from HTTP HEAD cache
+                    do
+                        local _, _, headers = network.fetch(url, 'HEAD')
+                        after = headers['last-modified']
+                    end
+
+                    -- If they are different, we need to reload!
+                    if before ~= after then
+                        urls[url] = 'reload'
+                        childPortal.globals.package.loaded[url] = nil -- Flush from module cache
+                        network.fetchEntries.GET[url] = nil -- Flush from HTTP GET cache
+                    else
+                        urls[url] = 'done'
+                    end
+                    copas.wakeup(mainCoroutine)
+                end)
+            end
+        end
+
+        -- Wait until none of the `urls` are in `'waiting'` state
+        while true do
+            local anyWaiting = false
+            for _, state in pairs(urls) do
+                if state == 'waiting' then
+                    anyWaiting = true
+                    break
+                end
+            end
+            if anyWaiting then
+                copas.sleep(-1)
+            else
+                break
+            end
+        end
+
+        -- Reload the modules using the child portal's `require`
+        for url, state in pairs(urls) do
+            if state == 'reload' then
+                childPortal.globals.require(url:sub(#childPortal.basePath + 1):gsub('^/*', ''))
+            end
+        end
     end
 end
 
